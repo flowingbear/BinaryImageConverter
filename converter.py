@@ -83,11 +83,14 @@ class BinaryImageConverter:
         # Calculate new header size including magic bytes
         total_header_size = self.HEADER_SIZE + len(self.MAGIC_BYTES)
 
-        # Extract and validate file content
+        # Extract file content
         file_content = binary_data[total_header_size:total_header_size + file_size]
 
-        if len(file_content) < file_size:
-            raise ValueError("Corrupted image: Unable to recover original file data")
+        # Get actual available data size
+        available_size = len(file_content)
+        if available_size < file_size:
+            print(f"Warning: Could only recover {available_size} of {file_size} bytes. File may be incomplete.")
+            file_size = available_size
 
         # Write binary data
         with open(output_file, 'wb') as f:
