@@ -1,0 +1,33 @@
+modules = ["python-3.11"]
+
+[nix]
+channel = "stable-24_05"
+
+[workflows]
+runButton = "Project"
+
+[[workflows.workflow]]
+name = "Project"
+mode = "parallel"
+author = "agent"
+
+[[workflows.workflow.tasks]]
+task = "workflow.run"
+args = "Binary-JPG Converter Demo"
+
+[[workflows.workflow]]
+name = "Binary-JPG Converter Demo"
+author = "agent"
+
+[workflows.workflow.metadata]
+agentRequireRestartOnSave = false
+
+[[workflows.workflow.tasks]]
+task = "packager.installForAll"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "dd if=/dev/urandom of=test.bin bs=1024 count=10 && python binary2jpg.py test.bin test.jpg --mode bin2jpg && python binary2jpg.py test.jpg restored.bin --mode jpg2bin"
+
+[deployment]
+run = ["sh", "-c", "dd if=/dev/urandom of=test.bin bs=1024 count=10 && python binary2jpg.py test.bin test.jpg --mode bin2jpg && python binary2jpg.py test.jpg restored.bin --mode jpg2bin"]
