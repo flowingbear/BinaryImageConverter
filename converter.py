@@ -61,7 +61,17 @@ class BinaryImageConverter:
 
         # Check for magic bytes
         if len(binary_data) < len(self.MAGIC_BYTES) or binary_data[:len(self.MAGIC_BYTES)] != self.MAGIC_BYTES:
-            raise ValueError("This image was not created by this converter. Please only use images created with the bin2jpg mode.")
+            # In JPEG format, the data might not be aligned exactly as saved
+            # Look for magic bytes in the first few hundred bytes
+            magic_found = False
+            for i in range(min(512, len(binary_data) - len(self.MAGIC_BYTES))):
+                if binary_data[i:i+len(self.MAGIC_BYTES)] == self.MAGIC_BYTES:
+                    binary_data = binary_data[i:]  # Realign data from magic bytes
+                    magic_found = True
+                    break
+            
+            if not magic_found:
+                raise ValueError("This image was not created by this converter. Please only use images created with the bin2jpg mode.")
 
         # Extract header information (after magic bytes)
         header_start = len(self.MAGIC_BYTES)
