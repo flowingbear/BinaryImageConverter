@@ -14,7 +14,7 @@ def main():
         '--mode',
         choices=['bin2jpg', 'jpg2bin'],
         required=True,
-        help='Conversion mode: bin2jpg (binary to JPG) or jpg2bin (JPG to binary)'
+        help='Conversion mode: bin2jpg (binary to PNG) or jpg2bin (PNG to binary)'
     )
 
     args = parser.parse_args()

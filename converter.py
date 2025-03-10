@@ -47,8 +47,9 @@ class BinaryImageConverter:
             pixels_flat[i] = list(chunk)
 
         # Create and save image
+        # Using PNG instead of JPEG to preserve binary data more accurately
         image = Image.fromarray(pixels)
-        image.save(output_file, 'JPEG', quality=100)
+        image.save(output_file, 'PNG')
 
     def image_to_binary(self, input_file, output_file, progress_callback=None):
         """Convert a JPG image back to the original binary file."""
